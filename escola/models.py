@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 class Materia(models.Model):
@@ -45,3 +46,40 @@ class Aluno(models.Model):
     class Meta:
         verbose_name = 'Aluno'
         verbose_name_plural = 'Alunos'
+
+
+class GradeCurricular(models.Model):
+    # Explicação: Cada entrada na grade curricular representa uma matéria que é
+    # oferecida para uma turma específica. Assim, podemos ter "Matemática" na
+    # "6º Ano A" e também na "7º Ano B", cada uma com sua própria entrada na
+    # grade curricular.
+    turma = models.ForeignKey(
+        Turma,
+        on_delete=models.CASCADE,
+        related_name='grade_curricular',
+        verbose_name='Turma'
+    )
+    materia = models.ForeignKey(
+        Materia,
+        on_delete=models.CASCADE,
+        related_name='grade_curricular',
+        verbose_name='Matéria'
+    )
+
+    # Buscamos o modelo de usuário configurado no settings (nosso CustomUser)
+    professor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        # Filtro para listar apenas professores
+        limit_choices_to={'cargo': 'PROF'},
+        verbose_name="Professor"
+    )
+
+    def __str__(self):
+        return f"{self.turma} - {self.materia.nome} ({self.professor.username})"
+
+    class Meta:
+        verbose_name = "Grade Curricular"
+        verbose_name_plural = "Grades Curriculares"
+        # Garante que não haverá a mesma matéria duplicada na mesma turma
+        unique_together = ('turma', 'materia')

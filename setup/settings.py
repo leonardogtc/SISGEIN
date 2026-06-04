@@ -119,3 +119,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+# Media files (uploads)
+# URL pública que o navegador vai usar para acessar as imagens
+MEDIA_URL = '/media/'
+
+# Caminho físico no HD do Ubuntu onde os arquivos serão salvos
+MEDIA_ROOT = BASE_DIR / 'media'

@@ -84,6 +84,10 @@ class Livro(models.Model):
         blank=True, null=True,
         verbose_name='Capa do Livro'
     )
+    quantidade_disponivel = models.PositiveIntegerField(
+        default=1,
+        verbose_name='Quantidade Disponível'
+    )
     estado_conservacao = models.CharField(
         max_length=3,
         choices=ESTADOS_CONSERVACAO,

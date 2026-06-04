@@ -28,7 +28,8 @@ class LivroAdmin(admin.ModelAdmin):
     list_filter = ('categoria', 'editora', 'estado_conservacao')
     # Permite buscar pelo nome do autor também!
     search_fields = ('titulo', 'autores__nome')
-    # filter_horizontal cria uma interface elegante para selecionar múltiplos autores
+    # filter_horizontal cria uma interface elegante para selecionar
+    # múltiplos autores
     filter_horizontal = ('autores',)
 
 

@@ -67,6 +67,21 @@ class GradeCurricular(models.Model):
     )
 
     # Buscamos o modelo de usuário configurado no settings (nosso CustomUser)
+    """_summary_
+
+    Returns:
+        _type_: _description_
+
+        Expliqueção: O campo "professor" é uma ForeignKey para o modelo de
+        usuário, mas com um filtro específico para garantir que apenas
+        usuários com o cargo de "PROF" (professor) possam ser selecionados.
+        Isso é feito usando o argumento "limit_choices_to", que restringe as
+        opções disponíveis no campo de seleção para apenas aqueles usuários
+        que têm o cargo de professor. Dessa forma, garantimos que a grade
+        curricular seja associada apenas a professores, evitando erros de
+        associação com outros tipos de usuários, como diretores ou
+        coordenadores.
+    """
     professor = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,

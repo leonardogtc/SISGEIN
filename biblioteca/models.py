@@ -64,3 +64,56 @@ class Editora(models.Model):
     class Meta:
         verbose_name = 'Editora'
         verbose_name_plural = 'Editoras'
+
+
+class Livro(models.Model):
+    ESTADOS_CONSERVACAO = (
+        ('EXC', 'Excelente'),
+        ('REG', 'Regular (Marcas de uso)'),
+        ('DAN', 'Danificado/Rasurado'),
+    )
+    titulo = models.CharField(
+        max_length=200,
+        verbose_name='Título do Livro'
+    )
+    capa = models.ImageField(
+        upload_to='capas_livros/',
+        blank=True, null=True,
+        verbose_name='Capa do Livro'
+    )
+    estado_conservacao = models.CharField(
+        max_length=3,
+        choices=ESTADOS_CONSERVACAO,
+        default='EXC',
+        verbose_name='Estado de Conservação'
+    )
+    # RELACIONAMENTOS ROBUSTOS:
+    # Muitos para Muitos (Vários autores por livro)
+    autores = models.ManyToManyField(
+        Autor,
+        related_name='livros',
+        verbose_name='Autores do Livro'
+    )
+    editora = models.ForeignKey(
+        Editora,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='livros',
+        verbose_name='Editora do Livro'
+    )
+    categoria = models.ForeignKey(
+        Categoria,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='livros',
+        verbose_name='Categoria do Livro'
+    )
+
+    def __str__(self):
+        return self.titulo
+
+    class Meta:
+        verbose_name = 'Livro'
+        verbose_name_plural = 'Livros'

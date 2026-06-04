@@ -1,5 +1,8 @@
 from django.db import models
 
+from escola.models import Aluno
+from django.conf import settings
+
 # Create your models here.
 
 
@@ -117,3 +120,40 @@ class Livro(models.Model):
     class Meta:
         verbose_name = 'Livro'
         verbose_name_plural = 'Livros'
+
+
+class Emprestimo(models.Model):
+    livro = models.ForeignKey(
+        Livro,
+        on_delete=models.CASCADE,
+        related_name='emprestimos',
+        verbose_name='Livro'
+    )
+    aluno = models.ForeignKey(
+        Aluno, on_delete=models.CASCADE,
+        related_name='emprestimos', verbose_name='Aluno'
+    )
+    funcionario = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name='emprestimos',
+        verbose_name='Funcionário Responsável'
+    )
+
+    data_saida = models.DateField(
+        auto_now_add=True, verbose_name="Data de Saída")
+    data_devolucao_prevista = models.DateField(
+        verbose_name="Data de Devolução Prevista")
+    data_devolucao_real = models.DateField(
+        null=True, blank=True, verbose_name="Data da Devolução Real")
+    observacoes_danos = models.TextField(
+        blank=True, null=True, verbose_name="Registro de Danos na Devolução")
+
+    def __str__(self):
+        return f"{self.livro.titulo} emprestado para {self.aluno.nome} " \
+            f"em {self.data_saida.strftime('%d/%m/%Y')}"
+
+    class Meta:
+        verbose_name = 'Empréstimo'
+        verbose_name_plural = 'Empréstimos'
+        ordering = ['-data_saida']

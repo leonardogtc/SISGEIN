@@ -31,15 +31,18 @@ class LoteAdmin(admin.ModelAdmin):
         dias_para_vencer = (obj.data_validade - hoje).days
         if dias_para_vencer < 0:
             return format_html(
-                '<span style="color: red; font-weight: bold;">❌ Vencido</span>'
+                '<span style="color: red; font-weight: bold;">'
+                '❌ Vencido</span>'
             )
         elif dias_para_vencer <= 15:
             return format_html(
-                '<span style="color: orange; font-weight: bold;">⚠️ Vence em {} '
+                '<span style="color: orange; font-weight: bold;">'
+                '⚠️ Vence em {} '
                 'dias</span>', dias_para_vencer
             )
         else:
-            return format_html('<span style="color: green; font-weight: bold;">'
+            return format_html('<span style="color: green; '
+                               'font-weight: bold;">'
                                '✅ Vence em {} dias</span>', dias_para_vencer)
 
     # Define o título da coluna no painel administrativo
